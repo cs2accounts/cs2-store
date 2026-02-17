@@ -5,108 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CS2 Accounts Store</title>
   <style>
-    :root {
-      --bg: #0b0f1a;
-      --card: #111827;
-      --accent: #22c55e;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
+    :root{
+      --bg:#050814;
+      --card:#0f172a;
+      --accent:#22c55e;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #020617, #0b0f1a);
-      color: var(--text);
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#020617,#050814);
+      color:var(--text);
     }
 
-    header {
-      padding: 24px;
-      text-align: center;
-      background: #020617;
-      border-bottom: 1px solid #1f2937;
+    header{
+      text-align:center;
+      padding:28px 16px;
+      border-bottom:1px solid #1e293b;
+      background:#020617;
     }
 
-    header h1 {
-      font-size: 2rem;
-      letter-spacing: 1px;
+    header h1{font-size:2rem;margin-bottom:6px}
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+      padding:24px;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 24px;
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:20px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
+    .card{
+      background:var(--card);
+      padding:22px;
+      border-radius:18px;
+      box-shadow:0 15px 35px rgba(0,0,0,.45);
+      transition:.25s ease;
     }
 
-    .card {
-      background: var(--card);
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-      transition: transform .2s ease, box-shadow .2s ease;
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 25px 50px rgba(0,0,0,.65);
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    .price{
+      font-size:1.6rem;
+      color:var(--accent);
+      font-weight:bold;
+      margin:10px 0 14px;
     }
 
-    .price {
-      font-size: 1.6rem;
-      color: var(--accent);
-      margin: 10px 0;
-      font-weight: bold;
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:12px;
+      background:var(--accent);
+      color:#022c22;
+      font-weight:bold;
+      font-size:1rem;
+      cursor:pointer;
     }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #022c22;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
+    button:hover{filter:brightness(1.1)}
+
+    .hidden{display:none}
+
+    .checkout{
+      max-width:620px;
+      margin:40px auto;
+      background:var(--card);
+      padding:26px;
+      border-radius:18px;
+      box-shadow:0 20px 40px rgba(0,0,0,.55);
     }
 
-    button:hover { filter: brightness(1.1); }
-
-    .hidden { display: none; }
-
-    .checkout {
-      max-width: 600px;
-      margin: 40px auto;
-      background: var(--card);
-      padding: 24px;
-      border-radius: 16px;
+    .back{
+      margin-top:14px;
+      background:#334155;
+      color:white;
     }
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: var(--muted);
-      border-top: 1px solid #1f2937;
-      margin-top: 40px;
+    footer{
+      margin-top:50px;
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+      border-top:1px solid #1e293b;
     }
 
-    .back-btn {
-      margin-top: 12px;
-      background: #374151;
-      color: white;
-    }
-
-    .notice {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: var(--muted);
+    .notice{
+      font-size:.9rem;
+      color:var(--muted);
+      margin-top:12px;
     }
   </style>
 </head>
@@ -119,7 +117,7 @@
 
 <!-- HOME -->
 <section id="home" class="container">
-  <div class="grid" id="productGrid"></div>
+  <div class="grid" id="grid"></div>
 </section>
 
 <!-- CHECKOUT -->
@@ -128,18 +126,18 @@
     <h2>🛒 Checkout</h2>
     <p id="summary"></p>
 
-    <!-- PAYPAL BUTTON (SUBSTITUIR PELO TEU EMAIL) -->
-    <form id="paypalForm" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+    <!-- PAYPAL (SANDBOX PARA TESTES — TROCAR PARA PRODUÇÃO DEPOIS) -->
+    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_blank">
       <input type="hidden" name="cmd" value="_xclick">
       <input type="hidden" name="business" value="goncalo.lorena@gmail.com">
       <input type="hidden" name="item_name" id="pp_name">
       <input type="hidden" name="amount" id="pp_price">
       <input type="hidden" name="currency_code" value="EUR">
+
       <button type="submit">💳 Pagar com PayPal</button>
     </form>
 
-    <button class="back-btn" onclick="goHome()">⬅ Voltar</button>
-
+    <button class="back" onclick="goHome()">⬅ Voltar</button>
     <p class="notice">⚠️ Entrega digital após confirmação do pagamento.</p>
   </div>
 </section>
@@ -149,49 +147,46 @@
 </footer>
 
 <script>
-  const products = [
-    { medals: 1, price: 13 },
-    { medals: 2, price: 17 },
-    { medals: 3, price: 24 },
-    { medals: 4, price: 30 },
-    { medals: 5, price: 40 },
-    { medals: 6, price: 55 }
-  ];
+const products=[
+  {m:1,p:13},
+  {m:2,p:17},
+  {m:3,p:24},
+  {m:4,p:30},
+  {m:5,p:40},
+  {m:6,p:55}
+];
 
-  const grid = document.getElementById("productGrid");
+const grid=document.getElementById('grid');
 
-  products.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "card";
+products.forEach(prod=>{
+  const el=document.createElement('div');
+  el.className='card';
+  el.innerHTML=`
+    <h3>Conta CS2 — ${prod.m} Medalha${prod.m>1?'s':''}</h3>
+    <p>⏱️ ~1500 horas</p>
+    <p>🏅 Medalhas: ${prod.m}</p>
+    <div class="price">€${prod.p}</div>
+    <button onclick="buy(${prod.m},${prod.p})">Comprar agora</button>
+  `;
+  grid.appendChild(el);
+});
 
-    card.innerHTML = `
-      <h3>Conta CS2 — ${p.medals} Medalha${p.medals>1?'s':''}</h3>
-      <p>⏱️ ~1500 horas de jogo</p>
-      <p>🏅 Medalhas: ${p.medals}</p>
-      <div class="price">€${p.price}</div>
-      <button onclick="buy(${p.medals}, ${p.price})">Comprar agora</button>
-    `;
+function buy(medals,price){
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('checkout').classList.remove('hidden');
 
-    grid.appendChild(card);
-  });
+  document.getElementById('summary').innerText=
+    `Conta CS2 com ${medals} medalha(s) — €${price}`;
 
-  function buy(medals, price) {
-    document.getElementById("home").classList.add("hidden");
-    document.getElementById("checkout").classList.remove("hidden");
+  document.getElementById('pp_name').value=`Conta CS2 ${medals} Medalhas`;
+  document.getElementById('pp_price').value=price;
+}
 
-    document.getElementById("summary").innerText =
-      `Conta CS2 com ${medals} medalha(s) — €${price}`;
-
-    document.getElementById("pp_name").value = `Conta CS2 ${medals} Medalhas`;
-    document.getElementById("pp_price").value = price;
-  }
-
-  function goHome() {
-    document.getElementById("checkout").classList.add("hidden");
-    document.getElementById("home").classList.remove("hidden");
-  }
+function goHome(){
+  document.getElementById('checkout').classList.add('hidden');
+  document.getElementById('home').classList.remove('hidden');
+}
 </script>
 
 </body>
 </html>
-
