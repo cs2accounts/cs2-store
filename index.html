@@ -126,17 +126,7 @@
     <h2>🛒 Checkout</h2>
     <p id="summary"></p>
 
-    <!-- PAYPAL (SANDBOX PARA TESTES — TROCAR PARA PRODUÇÃO DEPOIS) -->
-    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-      <input type="hidden" name="cmd" value="_xclick">
-      <input type="hidden" name="business" value="goncalo.lorena@gmail.com">
-      <input type="hidden" name="item_name" id="pp_name">
-      <input type="hidden" name="amount" id="pp_price">
-      <input type="hidden" name="currency_code" value="EUR">
-
-      <button type="submit">💳 Pagar com PayPal</button>
-    </form>
-
+    <button id="payButton">💳 Pagar com PayPal</button>
     <button class="back" onclick="goHome()">⬅ Voltar</button>
     <p class="notice">⚠️ Entrega digital após confirmação do pagamento.</p>
   </div>
@@ -156,6 +146,15 @@ const products=[
   {m:6,p:55}
 ];
 
+const paypalLinks = {
+  1: "https://www.paypal.com/ncp/payment/Y5PMLL4LTXADY",
+  2: "https://www.paypal.com/ncp/payment/H8VF6LL2PGM8Q",
+  3: "https://www.paypal.com/ncp/payment/NCKMH339LTVD6",
+  4: "https://www.paypal.com/ncp/payment/Z6B8S8H4ZSELS",
+  5: "https://www.paypal.com/ncp/payment/LFK4CD92GX6WU",
+  6: "https://www.paypal.com/ncp/payment/9JKPLW8ZYNYMC"
+};
+
 const grid=document.getElementById('grid');
 
 products.forEach(prod=>{
@@ -171,15 +170,19 @@ products.forEach(prod=>{
   grid.appendChild(el);
 });
 
-function buy(medals,price){
+function buy(medals, price){
   document.getElementById('home').classList.add('hidden');
   document.getElementById('checkout').classList.remove('hidden');
 
-  document.getElementById('summary').innerText=
+  document.getElementById('summary').innerText =
     `Conta CS2 com ${medals} medalha(s) — €${price}`;
 
-  document.getElementById('pp_name').value=`Conta CS2 ${medals} Medalhas`;
-  document.getElementById('pp_price').value=price;
+  const payButton = document.getElementById('payButton');
+  payButton.onclick = function(){
+    const link = paypalLinks[medals];
+    if(link) window.open(link, "_blank");
+    else alert("Link de pagamento não encontrado!");
+  };
 }
 
 function goHome(){
@@ -190,3 +193,4 @@ function goHome(){
 
 </body>
 </html>
+
